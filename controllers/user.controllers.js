@@ -65,11 +65,11 @@ export const userLogin = async (req, res) => {
     }
 }
 
-export const purchaseClothes = async () => {
+export const purchaseClothes = async (req, res) => {
     try {
-        const {id} = req.params;
+        const id = req.params.id;
         const email = req.email;
-        const user = UserModel.updateOne(
+        const user = await UserModel.updateOne(
             {
                 email,
             }, {
@@ -85,6 +85,62 @@ export const purchaseClothes = async () => {
     } catch (error) {
         res.status(403).json({
             message: "not purchased"
+        })
+    }
+}
+
+export const purchasedItems = async (req, res) => {
+    try {
+        const email = req.email;
+        await UserModel.findOne({
+            email
+        })
+        .then(async (value) => {
+            if(value) {
+                const allUserDress = await clothesModel.find({
+                    _id: {
+                        "$in": value.purchaseClothes
+                    }
+                })
+                return res.status(201).json({
+                    purchasedDress: allUserDress
+                })
+            } else {
+                return res.status(403).json({
+                    message: "Error geting purchaded"
+                })
+            }
+        })
+    } catch (error) {
+        return res.status(403).json({
+            message: "error"
+        })
+    }
+}
+
+export const deleteClothes = async (req, res) => {
+    try {
+        const email = req.email;
+        const {id} = req.params;
+        const user = await UserModel.findOne({
+            email
+        })
+
+        if(!user) {
+            return res.status(403).json({
+                message: "User not found..."
+            })
+        }
+
+        user.purchaseClothes = user.purchaseClothes.filter(_id => String(_id) !== String(id));
+        await user.save();
+
+        return res.status(200).json({
+            message: "Item deleted successfully..."
+        })
+    } catch (error) {
+        return res.status(403).json({
+            message: "Facing Error..."
         })
     }
 }
