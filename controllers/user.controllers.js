@@ -1,5 +1,5 @@
 import UserModel from "../models/user.model.js";
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 import clothesModel from "../models/clothes.model.js";
