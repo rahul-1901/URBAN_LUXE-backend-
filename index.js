@@ -17,9 +17,13 @@ app.use(express.json());
 
 app.use("/api/clothes", route);
 app.use("/api/user", userRoute);
-app.use("/api", deliveryRoute)
+app.use("/api", deliveryRoute);
+
+app.get("/", (req, res) => {
+    res.send("Welcome to the E-commerce API!");
+});
 
 const PORT = process.env.PORT || 3000;
 connectDB().then(() => {
-    app.listen(PORT, () => {console.log(`Server running on ${PORT}`)});
+    app.listen(PORT, () => { console.log(`Server running on ${PORT}`) });
 })
