@@ -19,6 +19,12 @@ app.use("/api/clothes", route);
 app.use("/api/user", userRoute);
 app.use("/api", deliveryRoute)
 
+app.get("/ro", async(req, res) => {
+    res.json({
+        message: "hello"
+    })
+})
+
 const PORT = process.env.PORT || 3000;
 connectDB().then(() => {
     app.listen(PORT, () => {console.log(`Server running on ${PORT}`)});
