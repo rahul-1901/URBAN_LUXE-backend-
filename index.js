@@ -19,7 +19,7 @@ app.use("/api/clothes", route);
 app.use("/api/user", userRoute);
 app.use("/api", deliveryRoute);
 
-app.get("/", (req, res) => {
+app.get("/ro", (req, res) => {
     res.send("Welcome to the E-commerce API!");
 });
 
