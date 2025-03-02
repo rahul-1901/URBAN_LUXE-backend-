@@ -6,6 +6,7 @@ import clothesModel from './models/clothes.model.js';
 import route from './routes/clothes.routes.js';
 import userRoute from './routes/user.routes.js';
 import bcrypt from 'bcrypt';
+import deliveryRoute from './routes/delivery.routes.js';
 const app = express();
 dotenv.config();
 connectDB();
@@ -16,6 +17,7 @@ app.use(express.json());
 
 app.use("/api/clothes", route);
 app.use("/api/user", userRoute);
+app.use("/api", deliveryRoute)
 
 const PORT = process.env.PORT || 3000;
 connectDB().then(() => {

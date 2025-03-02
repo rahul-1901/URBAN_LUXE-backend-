@@ -13,10 +13,12 @@ const UserSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
-    }, purchaseClothes: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'clothesModel'
-    }]
+    }, purchaseClothes: [
+        {
+            _id: { type: mongoose.Schema.Types.ObjectId, ref: "clothesModel" },
+            count: { type: Number, default: 1 }
+        }
+    ]
 })
 
 const UserModel = mongoose.model("user", UserSchema);

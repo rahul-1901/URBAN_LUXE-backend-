@@ -67,25 +67,41 @@ export const userLogin = async (req, res) => {
 
 export const purchaseClothes = async (req, res) => {
     try {
-        const id = req.params.id;
-        const email = req.email;
-        const user = await UserModel.updateOne(
-            {
-                email,
-            }, {
-                "$push": {
-                    purchaseClothes: id
-                }
-            }
-        ) 
+        const { id } = req.params; 
+        const  email  = req.email;
 
-        res.status(201).json({
-            message: "Clothes purchased successfully..."
-        })
+        const user = await UserModel.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        if (!Array.isArray(user.purchaseClothes)) {
+            user.purchaseClothes = [];
+        }
+
+        let itemExists = false;
+        user.purchaseClothes = user.purchaseClothes.map((item) => {
+            if (item && item._id && item._id.toString() === id) {
+                item.count += 1;
+                itemExists = true;
+            }
+            return item;
+        });
+
+        if (!itemExists) {
+            user.purchaseClothes.push({_id: id, count: 1});
+        }
+
+        await user.save();
+
+        return res.status(201).json({
+            message: "Clothes purchased successfully!",
+            purchasedClothes: user.purchaseClothes
+        });
+
     } catch (error) {
-        res.status(403).json({
-            message: "not purchased"
-        })
+        return res.status(500).json({ message: "Purchase failed" });
     }
 }
 
@@ -132,11 +148,22 @@ export const deleteClothes = async (req, res) => {
             })
         }
 
-        user.purchaseClothes = user.purchaseClothes.filter(_id => String(_id) !== String(id));
+        let itemDeleted = false;
+        user.purchaseClothes = user.purchaseClothes.map((item) => {
+            if(item._id.toString() === id) {
+                if(item.count > 1) {
+                    item.count -= 1;
+                } else {
+                    itemDeleted = true;
+                    return null;
+                }
+            }
+            return item;
+        }).filter(Boolean)
         await user.save();
 
         return res.status(200).json({
-            message: "Item deleted successfully..."
+            message: itemDeleted ? "Item deleted successfully..." : "One item removed..."
         })
     } catch (error) {
         return res.status(403).json({
@@ -144,3 +171,4 @@ export const deleteClothes = async (req, res) => {
         })
     }
 }
+
