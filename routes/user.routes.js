@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import { userSignUp, userLogin, purchaseClothes, purchasedItems, deleteClothes } from '../controllers/user.controllers.js';
+import { userSignUp, userLogin, purchaseClothes, purchasedItems, deleteClothes, userDetails } from '../controllers/user.controllers.js';
 import { userLoginValidation, userSignUpValidation} from '../middlewares/userInputValidation.middleware.js'
 import { userAuthentication } from '../middlewares/user.middleware.js';
 
@@ -9,5 +9,6 @@ userRoute.post("/login", userLoginValidation, userLogin);
 userRoute.post("/clothes/:id", userAuthentication, purchaseClothes);
 userRoute.get("/purchasedItems", userAuthentication, purchasedItems);
 userRoute.delete("/deleteClothes/:id", userAuthentication, deleteClothes);
+userRoute.get("/userInfo", userAuthentication, userDetails);
 
 export default userRoute;

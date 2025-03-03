@@ -172,3 +172,25 @@ export const deleteClothes = async (req, res) => {
     }
 }
 
+export const userDetails = async (req, res) => {
+    try {
+        const email = req.email;
+        const user = await UserModel.findOne({
+            email
+        })
+
+        if(!user) {
+            return res.status(403).json({
+                message: "User not found..."
+            })
+        }
+
+        res.status(200).json({
+            user
+        })
+    } catch (error) {
+        return res.status(403).json({
+            message: "Error backend for userInfo!!"
+        })
+    }
+}

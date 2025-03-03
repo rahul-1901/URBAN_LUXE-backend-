@@ -23,7 +23,7 @@ export const deliveryInfo = async (req, res) => {
 
         if(deliveryRecord){
             return res.status(200).json({
-                message: "Info already there..."
+                message: "Redirecting to Payment Gateway..."
             })
         } else {
             deliveryRecord = await deliveryModel.create({
