@@ -178,7 +178,7 @@ export const userDetails = async (req, res) => {
         const user = await UserModel.findOne({
             email
         })
-
+  
         if(!user) {
             return res.status(403).json({
                 message: "User not found..."
