@@ -49,7 +49,7 @@ export const userLogin = async (req, res) => {
             })
         }
         const SecretKey = process.env.SECRET_KEY;
-        const jwtToken = jwt.sign({ email: user.email, _id: user._id }, SecretKey, { expiresIn: '24h' });
+        const jwtToken = jwt.sign({ email: user.email, _id: user._id }, SecretKey, { expiresIn: process.env.JWT_EXPIRE });
         res.status(201).json({
             message: "User login success",
             success: true,
